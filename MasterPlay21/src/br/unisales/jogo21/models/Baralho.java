@@ -34,24 +34,46 @@ public class Baralho {
 	public int tamanhoMonte() {
 		return this.tamanhoMonte;
 	}
-
+	
 	public Carta comprarCarta() {
+		try {
+			return comprarCartaException();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private Carta comprarCartaException() throws Exception  {
 		this.tamanhoMonte--;
+		if(this.tamanhoMonte == 0) {
+			throw new Exception("fim do baralho");
+		}
 		return obterCartaNaPosicao(0);
 	}
 
 	public Carta obterCartaNaPosicao(int pos) {
 		if (this.ehEmbaralhar) {
-			System.out.println();
-			return this.monte.get(prox());
+			if(this.tamanhoMonte == 1) {
+				Carta c = this.monte.get(0);
+				this.monte.remove(0);
+				return c;
+			}
+			int idx = prox();
+			Carta c = this.monte.get(idx);
+			this.monte.remove(idx);
+			return c;
 		} else {
-			return this.monte.get(pos);
+			Carta c = this.monte.get(pos);
+			this.monte.remove(pos);
+			return c;
 
 		}
 	}
 
 	private int prox() {
-		return (int) Math.floor(Math.random() * 52);
+		return (int) Math.floor(Math.random() * this.tamanhoMonte);
+		
 	}
 
 	public void embaralhar() {
